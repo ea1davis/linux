@@ -83,7 +83,8 @@ static struct inode *ntfs_read_mft(struct inode *inode,
 		goto out;
 	} else if (!is_rec_inuse(rec)) {
 		err = -ESTALE;
-		ntfs_err(sb, "Inode r=%x is not in use!", (u32)ino);
+		if (___ratelimit(&sbi->msg_ratelimit, "ntfs3"))
+			printk(KERN_ERR "ntfs3(%s): Inode r=%x is not in use!", sb->s_id, (u32)ino);
 		goto out;
 	}
 
