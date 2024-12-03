@@ -1337,6 +1337,12 @@ dbAllocAG(struct bmap * bmp, int agno, s64 nblocks, int l2nb, s64 * results)
 		return -EIO;
 	}
 
+	if (!bmp->db_agwidth || !bmp->db_agheight) {
+		jfs_error(bmp->db_ipbmap->i_sb,
+			  "width/height in dmapctl of the AG is zero\n");
+		return -EIO;
+	}
+
 	/* determine the starting block number of the allocation
 	 * group.
 	 */
