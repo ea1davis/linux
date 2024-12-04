@@ -544,8 +544,15 @@ struct inode *nilfs_iget(struct super_block *sb, struct nilfs_root *root,
 	inode = nilfs_iget_locked(sb, root, ino);
 	if (unlikely(!inode))
 		return ERR_PTR(-ENOMEM);
-	if (!(inode->i_state & I_NEW))
+
+	if (!(inode->i_state & I_NEW)) {
+		struct nilfs_inode_info *ii = NILFS_I(inode);
+		if (test_bit(NILFS_I_INODE_SYNC, &ii->i_state)) {
+			iput(inode);
+			return ERR_PTR(-EIO);
+		}
 		return inode;
+	}
 
 	err = __nilfs_read_inode(sb, root, ino, inode);
 	if (unlikely(err)) {
