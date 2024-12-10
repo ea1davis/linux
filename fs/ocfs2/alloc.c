@@ -769,8 +769,9 @@ int ocfs2_search_extent_list(struct ocfs2_extent_list *el, u32 v_cluster)
 	int i;
 	struct ocfs2_extent_rec *rec;
 	u32 rec_end, rec_start, clusters;
+	u16 n = min_t(u16, le16_to_cpu(el->l_next_free_rec), le16_to_cpu(el->l_count));
 
-	for(i = 0; i < le16_to_cpu(el->l_next_free_rec); i++) {
+	for(i = 0; i < n; i++) {
 		rec = &el->l_recs[i];
 
 		rec_start = le32_to_cpu(rec->e_cpos);
