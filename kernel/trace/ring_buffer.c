@@ -7019,6 +7019,9 @@ static int __rb_map_vma(struct ring_buffer_per_cpu *cpu_buffer,
 	lockdep_assert_held(&cpu_buffer->mapping_lock);
 
 	nr_subbufs = cpu_buffer->nr_pages + 1; /* + reader-subbuf */
+	if (((nr_subbufs + 1) << subbuf_order) < pgoff)
+		return -EINVAL;
+
 	nr_pages = ((nr_subbufs + 1) << subbuf_order) - pgoff; /* + meta-page */
 
 	nr_vma_pages = vma_pages(vma);
