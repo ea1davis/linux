@@ -104,6 +104,9 @@ static int traverse(struct seq_file *m, loff_t offset)
 			return -ENOMEM;
 	}
 	p = m->op->start(m, &m->index);
+	if (!p && !m->private)
+		return 0;
+
 	while (p) {
 		error = PTR_ERR(p);
 		if (IS_ERR(p))
