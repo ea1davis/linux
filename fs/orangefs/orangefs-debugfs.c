@@ -833,7 +833,9 @@ static void debug_string_to_mask(char *debug_string, void *mask, int type)
 {
 	char *unchecked_keyword;
 	int i;
-	char *strsep_fodder = kstrdup(debug_string, GFP_KERNEL);
+	char *strsep_fodder = kstrndup(debug_string,
+				       ORANGEFS_MAX_DEBUG_STRING_LEN,
+				       GFP_KERNEL);
 	char *original_pointer;
 	int element_count = 0;
 	struct client_debug_mask *c_mask = NULL;
