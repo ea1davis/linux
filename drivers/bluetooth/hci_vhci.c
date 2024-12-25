@@ -324,11 +324,16 @@ static ssize_t force_devcd_write(struct file *file, const char __user *user_buf,
 				 size_t count, loff_t *ppos)
 {
 	struct vhci_data *data = file->private_data;
-	struct hci_dev *hdev = data->hdev;
+	struct hci_dev *hdev;
 	struct sk_buff *skb = NULL;
 	struct devcoredump_test_data dump_data;
 	size_t data_size;
 	int ret;
+
+	if (!data)
+		return -EINVAL;
+
+	hdev = data->hdev;
 
 	if (count < offsetof(struct devcoredump_test_data, data) ||
 	    count > sizeof(dump_data))
