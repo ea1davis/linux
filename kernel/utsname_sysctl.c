@@ -37,6 +37,10 @@ static int proc_do_uts_string(const struct ctl_table *table, int write,
 	int r;
 	char tmp_data[__NEW_UTS_LEN + 1];
 
+	printk("tab: %p, data: %p, procname: %s, %s\n", table, table->data, table->procname, __func__);
+	if ((long)table->data < PAGE_OFFSET)
+		return -EINVAL;
+
 	memcpy(&uts_table, table, sizeof(uts_table));
 	uts_table.data = tmp_data;
 
